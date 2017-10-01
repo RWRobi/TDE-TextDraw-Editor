@@ -23,6 +23,7 @@ var nr = 0;
 var myBrowser = null;
 
 var isOpenHelpWindow = false;
+var isShowDebug = false;
 
 var version;
 var author;
@@ -47,20 +48,21 @@ API.onUpdate.connect(function ()
     if (isOpenHelpWindow === true) {
         var res = API.getScreenResolutionMaintainRatio();
         
+        API.drawRectangle((res.Width / 2) - 300, (res.Height / 2) - 260, 600, 450, 0, 0, 0, 191);
+        API.drawRectangle((res.Width / 2) - 300, (res.Height / 2) - 260, 600, 50, 255, 0, 0, 109);
         
-        API.drawRectangle((res.Width / 2) - 250, (res.Height / 2) - 260, 500, 450, 0, 0, 0, 191);
-        API.drawRectangle((res.Width / 2) - 250, (res.Height / 2) - 260, 500, 50, 255, 0, 0, 109);
-        API.drawText('HELP', (res.Width / 2) - 240, (res.Height / 2) - 258, 0.800000011920929, 255, 255, 255, 255, 1, 0, false, false, 0);
-        API.drawText('/font [0-7] - set font style TextDraw', (res.Width / 2) - 240, (res.Height / 2) - 204.00003051757812, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
-        API.drawText('/aligment (/tda) [0 - left, 1 - center, 2 - right] - set aligment font', (res.Width / 2) - 240, (res.Height / 2) - 178.00003051757812, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
-        API.drawText('/tdfloat (/tdf) [0 - left, 1 - center, 2 - right] - analog float in CSS', (res.Width / 2) - 240, (res.Height / 2) - 153, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
-        API.drawText('/tdcreate (/tdc) [1 - Text, 2 - Box] - create TextDraw', (res.Width / 2) - 240, (res.Height / 2) - 130.00003051757812, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
-        API.drawText('/tdcolor (/tdcl) [rgba (0-255)] - set TextDraw color', (res.Width / 2) - 240, (res.Height / 2) - 108, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
-        API.drawText('/tdmove (/tdm) - move the current textdraw', (res.Width / 2) - 240, (res.Height / 2) - 85, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
-        API.drawText('/tdsize (/tds) - change width / height size of the current textdraw', (res.Width / 2) - 240, (res.Height / 2) - 61, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
-        API.drawText('/tdtext (/tdt) - change text of the current textdraw', (res.Width / 2) - 240, (res.Height / 2) - 36, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
-        API.drawText('/shadow (/tdsh) [0 - no, 1 - yes], /outline (/tdo) [0 - no, 1 - yes]', (res.Width / 2) - 240, (res.Height / 2) - 9, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
-        API.drawText('Type ~y~/tde~w~ for open the TDE Editor', (res.Width / 2) - 240, (res.Height / 2) + 18, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
+        API.drawText('HELP', (res.Width / 2) - 290, (res.Height / 2) - 258, 0.800000011920929, 255, 255, 255, 255, 1, 0, false, false, 0);
+        API.drawText('/font [0-7] - set font style TextDraw', (res.Width / 2) - 290, (res.Height / 2) - 204.00003051757812, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
+        API.drawText('/aligment (/tda) [0 - left, 1 - center, 2 - right] - set aligment font', (res.Width / 2) - 290, (res.Height / 2) - 178.00003051757812, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
+        API.drawText('/tdfloat (/tdf) [0 - left, 1 - center, 2 - right] - analog float in CSS', (res.Width / 2) - 290, (res.Height / 2) - 153, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
+        API.drawText('/tdcreate (/tdc) [1 - Text, 2 - Box] - create TextDraw', (res.Width / 2) - 290, (res.Height / 2) - 130.00003051757812, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
+        API.drawText('/tdcolor (/tdcl) [rgba (0-255)] - set TextDraw color', (res.Width / 2) - 290, (res.Height / 2) - 108, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
+        API.drawText('/tdmove (/tdm) - move the current textdraw', (res.Width / 2) - 290, (res.Height / 2) - 85, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
+        API.drawText('/tdsize (/tds) - change width / height size of the current textdraw', (res.Width / 2) - 290, (res.Height / 2) - 61, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
+        API.drawText('/tdtext (/tdt) - change text of the current textdraw', (res.Width / 2) - 290, (res.Height / 2) - 36, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
+        API.drawText('/shadow (/tdsh) [0 - no, 1 - yes], /outline (/tdo) [0 - no, 1 - yes]', (res.Width / 2) - 290, (res.Height / 2) - 9, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
+        API.drawText('/tdeclose (/tdcls), /tdr(emove), /tdexp(ort), /tded(it), /tdfilename (/tdfn), /tdd(ebug)', (res.Width / 2) - 290, (res.Height / 2) + 18, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
+        API.drawText('Type ~y~/tde~w~ for open the TDE Editor', (res.Width / 2) - 290, (res.Height / 2) + 46, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
         API.drawText('Press ~g~Enter~w~ if u want close this window', (res.Width / 2), (res.Height / 2) + 136, 0.4000000059604645, 255, 255, 255, 255, 4, 1, false, false, 0);
     }
     
@@ -70,6 +72,10 @@ API.onUpdate.connect(function ()
 		if(TextDraws > 0)
 		{
 			Move();
+			
+			if(isShowDebug)
+				Debug();
+			
 			for(var i = 0; i < TextDraws; i++)
 			{
 				if(TextDrawType[i] == 1)
@@ -94,6 +100,11 @@ API.onServerEventTrigger.connect(function (eventName, args)
 		case "OpenHelpWindow": 
 		{
             isOpenHelpWindow = true;
+			break;
+		}
+		case "TDEDebug": 
+		{
+            isShowDebug = !isShowDebug;
 			break;
 		}
 		case "SetConfig": 
@@ -478,4 +489,34 @@ function Move()
         /*API.sendChatMessage("PosTD: " + TextDrawPosX[i] + ", " + TextDrawPosY[i]);
         API.sendChatMessage("PosCR: " + posCursor.X + ", " + posCursor.Y);*/
 	}
+}
+
+function Debug()
+{
+    var i = SelectedTD;
+    var res = API.getScreenResolutionMaintainRatio();
+    var posX = "0";
+    var posY = "0";
+
+    if (TextDrawFloatW[i] == 0) //left
+        posX = "X left: " + TextDrawPosX[i] + " | ";
+    else if (TextDrawFloatW[i] == 2) //right
+        posX = "X right: " + (res.Width - (res.Width - TextDrawPosX[i])) + " | ";
+    else //default center 
+    {
+        var posLocX = (res.Width / 2);
+        posX = (TextDrawPosX[i] > posLocX) ? "X center: " + ((res.Width - TextDrawPosX[i] - posLocX) * -1) + " | " : "X center: " + (posLocX - TextDrawPosX[i]) + " | ";
+    }
+
+    if (TextDrawFloatH[i] == 0) //left
+        posY = "Y up: " + TextDrawPosY[i];
+    else if (TextDrawFloatH[i] == 2) //right
+        posY = "Y down: " + (res.Height - (res.Height - TextDrawPosY[i]));
+    else //default center 
+    {
+        var posLocY = (res.Height / 2);
+        posY = (TextDrawPosY[i] > posLocY) ? "Y center: " + ((res.Height - TextDrawPosY[i] - posLocY) * -1) : "Y center: " + (posLocY - TextDrawPosY[i]);
+    }
+
+    API.drawText('Debug: ' + posX + posY, (res.Width / 2), res.Height - 40, 0.4000000059604645, 255, 255, 255, 255, 0, 1, true, true, 0);
 }

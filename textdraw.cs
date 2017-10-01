@@ -13,7 +13,7 @@ namespace TextDraw
 		private ConfigData _configData = new ConfigData
 		{
 			Author = "[RW]Robi & Appi",
-			Version = "0.3.2 Stable"
+			Version = "0.3.3 Stable"
 		};
 		
 		public TextDraw()
@@ -177,6 +177,12 @@ namespace TextDraw
 		public void TdShowHelp(Client player)
 		{
 			ShowHelp(player);
+		}
+		
+		[Command("tddebug", Alias = "tdd")]
+		public void TdDebug(Client player)
+		{
+			API.triggerClientEvent(player, "TDEDebug");
 		}
 		
 	   /*
