@@ -8,12 +8,12 @@ namespace TextDraw
 {
 	public class TextDraw : Script 
 	{
-		int _tdeStatus = 0;
-		protected string FileName = "TDE_EXPORT";
-		protected ConfigData ConfigData = new ConfigData
+		private int _tdeStatus = 0;
+		private string _fileName = "TDE_EXPORT";
+		private ConfigData _configData = new ConfigData
 		{
 			Author = "[RW]Robi & Appi",
-			Version = "0.3.1 BETA"
+			Version = "0.3.2 Stable"
 		};
 		
 		public TextDraw()
@@ -148,7 +148,7 @@ namespace TextDraw
 		[Command("tdfilename", "/tdfilename [fileName]", Alias = "tdfn")]
 		public void TdFileName(Client player, string saveFileName)
 		{
-			FileName = saveFileName;
+			_fileName = saveFileName;
 			player.sendChatMessage("~y~TDE: ~w~ new file name - ~g~" + saveFileName);
 		}
 		
@@ -161,16 +161,16 @@ namespace TextDraw
 		[Command("tdexport", "Using: /tdexp", Alias = "tdexp")]
 		public void TdExport(Client player)
 		{
-			var coordsFile = !File.Exists(FileName + ".txt") ? new StreamWriter(FileName + ".txt") : File.AppendText(FileName + ".txt");
+			var coordsFile = !File.Exists(_fileName + ".txt") ? new StreamWriter(_fileName + ".txt") : File.AppendText(_fileName + ".txt");
 			var src = DateTime.Now;
 			var sec = new DateTime(src.Year, src.Month, src.Day, src.Hour, src.Minute, src.Second);	
 			
-			coordsFile.WriteLine("//TDE EDITOR by " + ConfigData.Author + ", v" + ConfigData.Version);
+			coordsFile.WriteLine("//TDE EDITOR by " + _configData.Author + ", v" + _configData.Version);
 			coordsFile.WriteLine("//TextDraws generated on " + sec.Day + "." + sec.Month + "." + sec.Year + " - " + sec.Hour + ":" + sec.Minute + ":" + sec.Second);
 			coordsFile.Close();
 			
 			API.triggerClientEvent(player, "Export");
-			player.sendChatMessage("TextDraws has been exported, all textdraws are in the ~g~" + FileName + ".txt~w~ file");
+			player.sendChatMessage("TextDraws has been exported, all textdraws are in the ~g~" + _fileName + ".txt~w~ file");
 		}
 		
 		[Command("help")]
@@ -188,15 +188,15 @@ namespace TextDraw
 		public void OnResourceStart()
 		{
 			API.consoleOutput("====================[TDE]====================");
-			API.consoleOutput("TextDraw Editor was loaded v" + ConfigData.Version);
-			API.consoleOutput("Authors: " + ConfigData.Author);
+			API.consoleOutput("TextDraw Editor was loaded v" + _configData.Version);
+			API.consoleOutput("Authors: " + _configData.Author);
 			API.consoleOutput("=============================================");
 		}
 		
 		public void OnPlayerConnected(Client player)
 		{
-			player.triggerEvent("SetConfig", ConfigData.Author, ConfigData.Version);
-			player.sendChatMessage("TDE Editor " + ConfigData.Version + " by ~r~" + ConfigData.Author);
+			player.triggerEvent("SetConfig", _configData.Author, _configData.Version);
+			player.sendChatMessage("TDE Editor " + _configData.Version + " by ~r~" + _configData.Author);
 			player.sendChatMessage("Type ~y~/tde ~w~for open the TDE Editor.");
 		}
 		
@@ -205,7 +205,7 @@ namespace TextDraw
 			switch (eventName)
 			{
 				case "Export":
-					var coordsFile = !File.Exists(FileName + ".txt") ? new StreamWriter(FileName + ".txt") : File.AppendText(FileName + ".txt");
+					var coordsFile = !File.Exists(_fileName + ".txt") ? new StreamWriter(_fileName + ".txt") : File.AppendText(_fileName + ".txt");
 					coordsFile.WriteLine(arguments[0].ToString());
 					coordsFile.Close();
 					break;
@@ -217,7 +217,8 @@ namespace TextDraw
 
 		public void ShowHelp(Client player)
 		{
-			player.sendChatMessage("~y~TDE Commands:", "~w~/font [0-7]");
+			player.triggerEvent("OpenHelpWindow");
+			/*player.sendChatMessage("~y~TDE Commands:", "~w~/font [0-7]");
 			player.sendChatMessage("~y~TDE Commands:", "~w~/aligment (/tda) [0 - left, 1 - center, 2 - right]");
 			player.sendChatMessage("~y~TDE Commands:", "~w~/tdfloat (/tdf) (Analog Float Css) [0 - left, 1 - center, 2 - right]");
 			player.sendChatMessage("~y~TDE Commands:", "~w~/tdcreate (/tdc) [1 - Text, 2 - Box]");
@@ -226,7 +227,7 @@ namespace TextDraw
 			player.sendChatMessage("~y~TDE Commands:", "~w~/tdsize (/tds) - change width / height size of the current textdraw.");
 			player.sendChatMessage("~y~TDE Commands:", "~w~/tdtext (/tdt) - change text of the current textdraw.");
 			player.sendChatMessage("~y~TDE Commands:", "~w~/shadow (/tdsh) [0 - no, 1 - yes], /outline (/tdo) [0 - no, 1 - yes]");
-			player.sendChatMessage("Type ~y~/tde ~w~for open the TDE Editor.");
+			player.sendChatMessage("Type ~y~/tde ~w~for open the TDE Editor.");*/
 		}
 	}
 		

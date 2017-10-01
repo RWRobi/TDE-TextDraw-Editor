@@ -22,25 +22,48 @@ var Menu = null;
 var nr = 0;
 var myBrowser = null;
 
+var isOpenHelpWindow = false;
+
 var version;
 var author;
 
 API.onKeyDown.connect(function (sender, e) 
 {
-	if(TDEditing > 0)
-	{
-		var i = SelectedTD;
-		if(e.KeyCode == Keys.Enter)
-		{
-			API.sendChatMessage("~y~TDE EDITOR:", "~w~You stopped editing this textdraw position.");
-			TDEditing = 0;
-			API.showCursor(false);
-		}
-	}
+    if(e.KeyCode == Keys.Enter)
+    {
+        if (isOpenHelpWindow === true)
+            isOpenHelpWindow = false;    
+
+        else if (TDEditing > 0) {
+            API.sendChatMessage("~y~TDE EDITOR:", "~w~You stopped editing this textdraw position.");
+            TDEditing = 0;
+            API.showCursor(false);
+        }
+    }
 });
 
 API.onUpdate.connect(function () 
 {
+    if (isOpenHelpWindow === true) {
+        var res = API.getScreenResolutionMaintainRatio();
+        
+        
+        API.drawRectangle((res.Width / 2) - 250, (res.Height / 2) - 260, 500, 450, 0, 0, 0, 191);
+        API.drawRectangle((res.Width / 2) - 250, (res.Height / 2) - 260, 500, 50, 255, 0, 0, 109);
+        API.drawText('HELP', (res.Width / 2) - 240, (res.Height / 2) - 258, 0.800000011920929, 255, 255, 255, 255, 1, 0, false, false, 0);
+        API.drawText('/font [0-7] - set font style TextDraw', (res.Width / 2) - 240, (res.Height / 2) - 204.00003051757812, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
+        API.drawText('/aligment (/tda) [0 - left, 1 - center, 2 - right] - set aligment font', (res.Width / 2) - 240, (res.Height / 2) - 178.00003051757812, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
+        API.drawText('/tdfloat (/tdf) [0 - left, 1 - center, 2 - right] - analog float in CSS', (res.Width / 2) - 240, (res.Height / 2) - 153, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
+        API.drawText('/tdcreate (/tdc) [1 - Text, 2 - Box] - create TextDraw', (res.Width / 2) - 240, (res.Height / 2) - 130.00003051757812, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
+        API.drawText('/tdcolor (/tdcl) [rgba (0-255)] - set TextDraw color', (res.Width / 2) - 240, (res.Height / 2) - 108, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
+        API.drawText('/tdmove (/tdm) - move the current textdraw', (res.Width / 2) - 240, (res.Height / 2) - 85, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
+        API.drawText('/tdsize (/tds) - change width / height size of the current textdraw', (res.Width / 2) - 240, (res.Height / 2) - 61, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
+        API.drawText('/tdtext (/tdt) - change text of the current textdraw', (res.Width / 2) - 240, (res.Height / 2) - 36, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
+        API.drawText('/shadow (/tdsh) [0 - no, 1 - yes], /outline (/tdo) [0 - no, 1 - yes]', (res.Width / 2) - 240, (res.Height / 2) - 9, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
+        API.drawText('Type ~y~/tde~w~ for open the TDE Editor', (res.Width / 2) - 240, (res.Height / 2) + 18, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
+        API.drawText('Press ~g~Enter~w~ if u want close this window', (res.Width / 2), (res.Height / 2) + 136, 0.4000000059604645, 255, 255, 255, 255, 4, 1, false, false, 0);
+    }
+    
 	if(Menu != null && Menu.Visible == true) API.drawMenu(Menu);
 	if(TDEStatus == 1)
 	{
@@ -68,6 +91,11 @@ API.onServerEventTrigger.connect(function (eventName, args)
 {
 	switch(eventName)
 	{
+		case "OpenHelpWindow": 
+		{
+            isOpenHelpWindow = true;
+			break;
+		}
 		case "SetConfig": 
 		{
 		    author = args[0];
@@ -216,8 +244,8 @@ API.onServerEventTrigger.connect(function (eventName, args)
 				API.sendNotification("~r~TextDraw Editor is not active, [/tde]");
 				return;
 			}
-			var i = SelectedTD;
-			API.showCursor(true);
+			
+			API.showCursor(!API.isCursorShown());
 			break;
 		}
 		case "TDFont":
@@ -384,7 +412,7 @@ API.onServerEventTrigger.connect(function (eventName, args)
                 else //default center 
                 {
                     var posLocX = (res.Width / 2);
-                    posX = (TextDrawPosX[i] > posLocX) ? "(res.Width / 2) + " + ((res.Width - TextDrawPosX[i] - posLocX) * -1) : "(res.Width / 2) - " + TextDrawPosX[i];
+                    posX = (TextDrawPosX[i] > posLocX) ? "(res.Width / 2) + " + ((res.Width - TextDrawPosX[i] - posLocX) * -1) : "(res.Width / 2) - " + (posLocX - TextDrawPosX[i]);
                 }
 
                 if (TextDrawFloatH[i] == 0) //left
@@ -394,7 +422,7 @@ API.onServerEventTrigger.connect(function (eventName, args)
                 else //default center 
                 {
                     var posLocY = (res.Height / 2);
-                    posY = (TextDrawPosY[i] > posLocY) ? "(res.Height / 2) + " + ((res.Height - TextDrawPosY[i] - posLocY) * -1) : "(res.Height / 2) - " + TextDrawPosY[i];
+                    posY = (TextDrawPosY[i] > posLocY) ? "(res.Height / 2) + " + ((res.Height - TextDrawPosY[i] - posLocY) * -1) : "(res.Height / 2) - " + (posLocY - TextDrawPosY[i]);
                 }
                 
 				if(TextDrawType[i] == 1)
