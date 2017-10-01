@@ -22,18 +22,15 @@ var Menu = null;
 var nr = 0;
 var myBrowser = null;
 
-API.onResourceStart.connect(function () 
-{
-	API.sendChatMessage("TDE Editor 0.3.0 by ~r~[RW]Robi~w~ and ~r~Appi");
-	API.sendChatMessage("Type ~y~/tde ~w~for open the TDE Editor.");
-});
+var version;
+var author;
 
 API.onKeyDown.connect(function (sender, e) 
 {
 	if(TDEditing > 0)
 	{
 		var i = SelectedTD;
-		if(e.KeyCode == Keys.Escape)
+		if(e.KeyCode == Keys.Enter)
 		{
 			API.sendChatMessage("~y~TDE EDITOR:", "~w~You stopped editing this textdraw position.");
 			TDEditing = 0;
@@ -71,6 +68,12 @@ API.onServerEventTrigger.connect(function (eventName, args)
 {
 	switch(eventName)
 	{
+		case "SetConfig": 
+		{
+		    author = args[0];
+		    version = args[1];
+			break;
+		}
 		case "Show_TDE":
 		{
 			if(TDEStatus == 1) 
@@ -86,17 +89,10 @@ API.onServerEventTrigger.connect(function (eventName, args)
 			TDEditing = 0;
 			TextDraws = 0;
 			TDEStatus = 1;
+
+            API.triggerServerEvent("Help");
 			API.sendNotification("~y~TextDraw Editor has opened.");
-			API.sendChatMessage("~y~TDE Commands:", "~w~/font [0-7]");
-			API.sendChatMessage("~y~TDE Commands:", "~w~/aligment [0 - left, 1 - center, 2 - right]");
-            API.sendChatMessage("~y~TDE Commands:", "~w~/tdfloat (Analog Float Css) [0 - left, 1 - center, 2 - right]");
-			API.sendChatMessage("~y~TDE Commands:", "~w~/tdcreate [1 - Text, 2 - Box]");
-			API.sendChatMessage("~y~TDE Commands:", "~w~/tdcolor [rgba (0-255)]");
-			API.sendChatMessage("~y~TDE Commands:", "~w~/tdmove - move the current textdraw.");
-			API.sendChatMessage("~y~TDE Commands:", "~w~/tdsize - change width / height size of the current textdraw.");
-			API.sendChatMessage("~y~TDE Commands:", "~w~/tdtext - change text of the current textdraw.");
-			API.sendChatMessage("~y~TDE Commands:", "~w~/tdeclose, /tdremove, /tdexport, /tdedit, /tdfilename");
-			API.sendChatMessage("~y~TDE Commands:", "~w~/shadow [0 - no, 1 - yes], /outline [0 - no, 1 - yes]");
+			
 			var res = API.getScreenResolution();
 			myBrowser = API.createCefBrowser(res.Width, res.Height);
 			API.waitUntilCefBrowserInit(myBrowser);
@@ -300,7 +296,7 @@ API.onServerEventTrigger.connect(function (eventName, args)
 			
 			TDEditing = 1;
 			API.sendChatMessage("~y~TDE EDITOR:", "~w~You are now editing this textdraw position.");
-			API.sendChatMessage("~y~TDE MOVEMENT:", "~w~To stop movement press ESC.");
+			API.sendChatMessage("~y~TDE MOVEMENT:", "~w~To stop movement press ENTER.");
 			API.sendChatMessage("~y~TDE MOVEMENT:", "~w~To start movement keep LMOUSE pressed.");
 			API.showCursor(true);
 			break;
@@ -413,14 +409,15 @@ API.onServerEventTrigger.connect(function (eventName, args)
 		}
 	}
 });
-function ChangeColor(c1, c2, c3, c4)
+
+function ChangeColor(r, g, b, a)
 {
-	var i = SelectedTD;
-	TextDrawR[i] = Number(c1);
-	TextDrawG[i] = Number(c2);
-	TextDrawB[i] = Number(c3);
-	TextDrawA[i] = Number(Math.floor(c4));
+	TextDrawR[SelectedTD] = Number(r);
+	TextDrawG[SelectedTD] = Number(g);
+	TextDrawB[SelectedTD] = Number(b);
+	TextDrawA[SelectedTD] = Number(Math.floor(a));
 }
+
 function Move()
 {
 	if(TDEditing == 1 && API.isControlPressed(24))

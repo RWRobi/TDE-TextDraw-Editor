@@ -1,7 +1,6 @@
 <meta>
     <info name="TEXTDRAW MAKER" author="[RW]Robi" type="gamemode"/>
-    <assembly ref="System.Xml.dll"/>
-    <script src="textdraw.cs" type="server" lang="csharp" />
+
 	<file src="colors.html"/>
 	<file src="js.js"/>
 	<file src="jquery.minicolors.js"/>
@@ -10,6 +9,10 @@
 	<file src="bootstrap.css"/>
 	<file src="jquery.minicolors.css"/>
 	<file src="jquery.minicolors.png"/>
+	
+    <script src="textdraw.cs" type="server" lang="csharp" />
     <script src="textdraw.js" type="client" lang="javascript" />
+	
 	<assembly ref="System.Data.dll"/>
+	<assembly ref="System.Xml.dll"/>
 </meta>
