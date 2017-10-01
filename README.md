@@ -22,3 +22,11 @@ By [RW]Robi & Appi
 - /tdtext (/tdt) - change text of the current textdraw
 - /shadow (/tdsh) [0 - no, 1 - yes], /outline (/tdo) [0 - no, 1 - yes]
 - Type /tde for open the TDE Editor
+
+# Gallery
+
+<p align="center">
+  <img src="https://i.imgur.com/EccB6Jm.png"/>
+  <img src="https://i.imgur.com/PRWuiAJ.gif"/>
+  <img src="https://i.imgur.com/zOZrjDY.gif"/>
+</p>
