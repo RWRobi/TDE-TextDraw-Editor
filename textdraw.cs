@@ -13,7 +13,7 @@ namespace TextDraw
 		private ConfigData _configData = new ConfigData
 		{
 			Author = "[RW]Robi & Appi",
-			Version = "0.3.3 Stable"
+			Version = "0.3.4 Stable"
 		};
 		
 		public TextDraw()
@@ -121,6 +121,13 @@ namespace TextDraw
 		{
 			API.triggerClientEvent(player, "TDColor");
 		}
+		
+		[Command("tdrgba")]
+		public void TdColorRgba(Client player, int r, int g, int b, int a)
+		{
+			API.triggerClientEvent(player, "TDColorRgba", r, g, b, a);
+		}
+		
 		[Command("tdtext", "/tdtext [text]", Alias = "tdt", GreedyArg = true)]
 		public void TdText(Client player, string text)
 		{

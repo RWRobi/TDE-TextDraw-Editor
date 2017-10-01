@@ -56,7 +56,7 @@ API.onUpdate.connect(function ()
         API.drawText('/aligment (/tda) [0 - left, 1 - center, 2 - right] - set aligment font', (res.Width / 2) - 290, (res.Height / 2) - 178.00003051757812, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
         API.drawText('/tdfloat (/tdf) [0 - left, 1 - center, 2 - right] - analog float in CSS', (res.Width / 2) - 290, (res.Height / 2) - 153, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
         API.drawText('/tdcreate (/tdc) [1 - Text, 2 - Box] - create TextDraw', (res.Width / 2) - 290, (res.Height / 2) - 130.00003051757812, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
-        API.drawText('/tdcolor (/tdcl) [rgba (0-255)] - set TextDraw color', (res.Width / 2) - 290, (res.Height / 2) - 108, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
+        API.drawText('/tdcolor (/tdcl) or /tdrgba - set TextDraw color', (res.Width / 2) - 290, (res.Height / 2) - 108, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
         API.drawText('/tdmove (/tdm) - move the current textdraw', (res.Width / 2) - 290, (res.Height / 2) - 85, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
         API.drawText('/tdsize (/tds) - change width / height size of the current textdraw', (res.Width / 2) - 290, (res.Height / 2) - 61, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
         API.drawText('/tdtext (/tdt) - change text of the current textdraw', (res.Width / 2) - 290, (res.Height / 2) - 36, 0.4000000059604645, 255, 255, 255, 255, 4, 0, false, false, 0);
@@ -66,7 +66,6 @@ API.onUpdate.connect(function ()
         API.drawText('Press ~g~Enter~w~ if u want close this window', (res.Width / 2), (res.Height / 2) + 136, 0.4000000059604645, 255, 255, 255, 255, 4, 1, false, false, 0);
     }
     
-	if(Menu != null && Menu.Visible == true) API.drawMenu(Menu);
 	if(TDEStatus == 1)
 	{
 		if(TextDraws > 0)
@@ -259,6 +258,21 @@ API.onServerEventTrigger.connect(function (eventName, args)
 			API.showCursor(!API.isCursorShown());
 			break;
 		}
+		case "TDColorRgba":
+		{
+			if(TDEStatus == 0)
+			{
+				API.sendNotification("~r~TextDraw Editor is not active, [/tde]");
+				return;
+			}
+
+            TextDrawR[SelectedTD] = parseInt(args[0], 10);
+            TextDrawG[SelectedTD] = parseInt(args[1], 10);
+            TextDrawB[SelectedTD] = parseInt(args[2], 10);
+            TextDrawA[SelectedTD] = parseInt(args[3], 10);
+			
+			break;
+		}
 		case "TDFont":
 		{
 			if(TDEStatus == 0)
@@ -359,22 +373,24 @@ API.onServerEventTrigger.connect(function (eventName, args)
 				API.sendNotification("There are no textdraws created.");
 				return;
 			}
+			
 			Menu = API.createMenu("TextDraw Editor", "Select a textdraw", 0, 0, 6);
 			for(var i = 0; i < TextDraws; i++)
 			{
-				if(TextDrawType[i] == 1) 
-				{	Menu.AddItem(API.createMenuItem("" + nr + "." + TextDrawText[i], "Select this textdraw")); nr++; }
-				if(TextDrawType[i] == 2) 
-				{	Menu.AddItem(API.createMenuItem("" + nr + ".Box", "Select this textdraw")); nr++; }
+				if(TextDrawType[i] == 1) { Menu.AddItem(API.createMenuItem("" + nr + "." + TextDrawText[i], "Select this textdraw")); nr++; }
+				if(TextDrawType[i] == 2) { Menu.AddItem(API.createMenuItem("" + nr + ".Box", "Select this textdraw")); nr++; }
 			}
+			
 			Menu.Visible = true;
 			TDEStatus = 0;
 			nr = 0;
+			
 			Menu.OnItemSelect.connect(function(sender, item, index) 
 			{	
 				Menu.Visible = false;
 				Menu = null;
 				TDEStatus = 1;
+				
 				for(var i = 0; i < TextDraws; i++)
 				{
 					if (TextDrawType[i] < 1) continue;
@@ -387,11 +403,13 @@ API.onServerEventTrigger.connect(function (eventName, args)
 					nr++;
 				}
 			});
+			
 			Menu.OnMenuClose.connect(function()
 			{
 				Menu = false;
 				TDEStatus = 1;
 			});
+			
 			break;
 		}
 		case "Export":
