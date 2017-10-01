@@ -1,0 +1,145 @@
+<html>
+<head>
+ <!-- jQuery -->
+  <script src="js.js"></script>
+
+  <!-- Bootstrap 3 -->
+  <link rel="stylesheet" href="bootstrap.css">
+
+  <!-- MiniColors -->
+  <script src="jquery.minicolors.js"></script>
+  <link rel="stylesheet" href="jquery.minicolors.css">
+
+  <style>
+  body { background-color:transparent;}
+    dl {
+      margin: 20px 0;
+    }
+    dt {
+      font-size: 120%;
+    }
+    dd {
+      padding: 10px 20px 20px 20px;
+    }
+    dd:last-child {
+      border-bottom: none;
+    }
+    code {
+      color: black;
+      border: none;
+      background: rgba(128, 128, 128, .1);
+    }
+    pre {
+      background: #f8f8f8;
+      border: none;
+      color: #333;
+      padding: 20px;
+    }
+    h2 {
+      margin-top: 50px;
+    }
+    h3 {
+      color: #aaa;
+    }
+    .jumbotron {
+      padding: 40px;
+    }
+    .jumbotron h1 {
+      margin-top: 0;
+    }
+    .jumbotron p:last-child {
+      margin-bottom: 0;
+    }
+  </style>
+
+  <script>
+    $(document).ready( function() {
+
+      $('.demo').each( function() {
+        //
+        // Dear reader, it's actually very easy to initialize MiniColors. For example:
+        //
+        //  $(selector).minicolors();
+        //
+        // The way I've done it below is just for the demo, so don't get confused
+        // by it. Also, data- attributes aren't supported at this time...they're
+        // only used for this demo.
+        //
+        $(this).minicolors({
+          control: $(this).attr('data-control') || 'hue',
+          defaultValue: $(this).attr('data-defaultValue') || '',
+          format: $(this).attr('data-format') || 'hex',
+          keywords: $(this).attr('data-keywords') || '',
+          inline: $(this).attr('data-inline') === 'true',
+          letterCase: $(this).attr('data-letterCase') || 'lowercase',
+          opacity: $(this).attr('data-opacity'),
+          position: $(this).attr('data-position') || 'bottom left',
+          swatches: $(this).attr('data-swatches') ? $(this).attr('data-swatches').split('|') : [],
+          change: function(value, opacity) {
+            if( !value ) return;
+            if( opacity ) value += ', ' + opacity;
+            if( typeof console === 'object' ) {
+              console.log(value);
+            }
+          },
+          theme: 'bootstrap'
+        });
+
+      });
+
+    });
+  </script>
+</head>
+</head>
+<script>
+var lastc = [];
+setInterval(function()
+{
+	var str = document.getElementById("rgba").value;
+	var str = str.replace("rgba", "");
+	var str = str.replace("(", "");
+	var nr = str.indexOf(",");
+	var c1 = "";
+	for(var i = 0; i <= nr; i++)
+	{
+		if(i < nr) c1 = "" + c1+str[i];
+	}
+	var str = str.replace(c1 + ",", "");
+	var nr = str.indexOf(",");
+	var c2 = "";
+	for(var i = 0; i <= nr; i++)
+	{
+		if(i < nr) c2 = "" + c2+str[i];
+		str[i] = "";
+	}
+	var str = str.replace(c2 + ",", "");
+	var nr = str.indexOf(",");
+	var c3 = "";
+	for(var i = 0; i <= nr; i++)
+	{
+		if(i < nr) c3 = "" + c3+str[i];
+		str[i] = "";
+	}
+	var str = str.replace(c3 + ",", "");
+	var nr = str.indexOf(")");
+	var c4 = "";
+	for(var i = 0; i <= nr; i++)
+	{
+		if(i < nr) c4 = "" + c4+str[i];
+		str[i] = "";
+	}
+	var str = str.replace(c4 + ")", "");
+	c4 = c4 * 255;
+	//if(lastc[0] == c1 && lastc[1] == c2 && lastc[2] == c3 && lastc[3] == c4) return;
+	resourceCall("ChangeColor", c1,c2,c3,c4);
+	lastc[0] = c1;
+	lastc[1] = c2;
+	lastc[2] = c3;
+	lastc[3] = c4;
+},500);
+</script>
+<span style="position: absolute; top:65%;">
+<input type="text" id="rgba" class="form-control demo" data-format="rgb" data-opacity="255" value="rgba(255, 255, 255, 1)">
+</span>
+</body>
+</html>
